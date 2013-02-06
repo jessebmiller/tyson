@@ -16,25 +16,26 @@
 
 <template name="header">
   <header>
+    <div class="left-margin">
+    </div>
     <div class="content">
       <h1>JesseBMiller</h1>
+    </div>
+    <div class="right-margin">
     </div>
   </header>
 </template>
 
 <template name="pageBody">
   <div class="pageBody">
-    <div class="left-margin">
-      {{{ runningHead }}}
-    </div>
     {{# each contents }}
-    <div class="row">
-      <div class="content">
+    <div class="row"> 
+      <div class="left-margin">
+      </div>
+     <div class="content">
         {{{ render }}}
       </div>
       <div class="right-margin">
-        {{{ renderMeta }}}
-        <p></p>
       </div>
     </div>
     {{/ each }}
@@ -43,21 +44,15 @@
 
 <template name="footer">
   <footer>
+    <div class="left-margin">
+    </div>
     <div class="content">
       <h4>Footer</h4>
+    </div>
+    <div class="right-margin">
     </div>
   </footer>
 </template>
 
-<template name="text">
-  <h2>{{ title }}</h2>
-  <p>{{ text }}</p>
-</template>
 
-<template name="image">
-  <img src="{{ url }}" />
-</template>
 
-<template name="tweet">
-  <p>{{ text }}</p>
-</template>

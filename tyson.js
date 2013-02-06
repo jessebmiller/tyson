@@ -1,9 +1,30 @@
-Content = new Meteor.Collection('content')
+
+Content = new Meteor.Collection('content');
+
+Content.path = (function () {
+  /* replace this with backbone routes? probably.
+   */
+  binding = {}
+  return {
+    add: function (pathDef, query) {
+      binding[pathDef] = query;
+      return this;
+    },
+    contents: function (path) {
+      query = binding[path] || {}; 
+      return Content.find(query);
+    }
+  }
+}());
 
 if (Meteor.isClient) {
 
   Template.pageBody.contents = function () {
-    return Content.find();
+    /* A set of objects for this url */
+    Content.path
+      .add('/tweets', {type: 'tweet'})
+      .add('/text', {type: 'text'});
+    return Content.path.contents(window.location.pathname);
   }
 
   Template.pageBody.render = function () {
