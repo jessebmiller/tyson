@@ -1,5 +1,8 @@
 Content = new Meteor.Collection('content')
-
+/*
+* Content is expected to have a 'type' field that identifies the name of the
+* template that renders it.
+*/
 if (Meteor.isClient) {
 
   Template.pageBody.contents = function () {
@@ -8,10 +11,13 @@ if (Meteor.isClient) {
 
   Template.pageBody.render = function () {
     /*
-     * Content.insert({type: 'tweet', text: 'not displayed?'})
+     * Return the template associated with this content rendered with this content
+     * Content is expected to have a 'type' field that identifies the name of the
+     * template that renders it.
      */
     if (this.type === 'pageBody') { 
-      throw new Error('do not create content of type pageBody it breaks stuff.')
+        /* do not allow content to instruct pageBody.render to recursively call itself */
+        throw new Error('Content of type pageBody causes infinate recursion.')
     }
     return Template[this.type](this);}
 
