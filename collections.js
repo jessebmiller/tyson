@@ -4,4 +4,3 @@ Content = new Meteor.Collection('content');
 * template that renders it.
 */
 
-

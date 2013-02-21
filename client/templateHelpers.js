@@ -3,7 +3,7 @@ Template.header.menuItems = function () {
    * type name
    * Used for generating a menu listing the contnet types
    * TODO: decide if these menu item definitions should go in the
-   *       database. 
+   *       database.
    */
 
   return [{displayName: 'Home', type: 'homepage'},
