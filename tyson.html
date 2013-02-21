@@ -1,5 +1,5 @@
 <head>
-  <title>JesseBMiller</title>
+  <title>TYSON CMS</title>
 </head>
 
 <body>
@@ -19,7 +19,12 @@
     <div class="left-margin">
     </div>
     <div class="content">
-      <h1>JesseBMiller</h1>
+      <h1>Header</h1>
+      <ul>
+        {{# each menuItems }}
+        <li><a href="/type/{{ type }}">{{ displayName }}</a></li>
+        {{/ each }}
+      </ul>
     </div>
     <div class="right-margin">
     </div>
@@ -29,7 +34,7 @@
 <template name="pageBody">
   <div class="pageBody">
     {{# each contents }}
-    <div class="row"> 
+    <div class="row">
       <div class="left-margin">
       </div>
      <div class="content">
