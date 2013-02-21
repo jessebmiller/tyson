@@ -4,13 +4,4 @@ Content = new Meteor.Collection('content');
 * template that renders it.
 */
 
-var ContentRouter = Backbone.Router.extend({
-  routes: {
-    ":type": "content"
-  },
-  content: function (type) {
-    console.log(type);
-    Session.set('type', type);
-  }
-});
 
