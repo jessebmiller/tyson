@@ -1,12 +1,14 @@
-var Urls = Backbone.Router.extend({
-  routes: {
-    '*path': 'setPath',
-  },
-  setPath: function (path) {
-    path = path.split('/');
-    Session.set('path', path);
-  }
-});
+if (Meteor.isClient) {
+    var Urls = Backbone.Router.extend({
+        routes: {
+            '*path': 'setPath',
+        },
+        setPath: function (path) {
+            path = path.split('/');
+            Session.set('path', path);
+        }
+    });
 
-Routes = new Urls;
-Backbone.history.start({pushState: true});
+    Routes = new Urls;
+    Backbone.history.start({pushState: true});
+}

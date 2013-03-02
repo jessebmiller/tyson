@@ -1,0 +1,27 @@
+<head>
+  <title>Tyson</title>
+</head>
+
+<body>
+  <div id="page">
+    {{>header}}
+    {{>page}}
+    {{>footer}}
+  </div>
+</body>
+
+<template name="header">
+  <h1>header</h1>
+</template>
+
+<template name="page">
+  {{{ renderThisPage }}}
+</template>
+
+<template name="footer">
+  <h3>footer</h3>
+</template>
+
+<template name="notFound">
+  <p>404 not found</p>
+</template>
