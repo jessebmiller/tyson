@@ -1,0 +1,20 @@
+<template name="homepage">
+  {{>navigation }}
+  {{#each highlights }}
+  <div class="highlight">
+    {{{ renderThisContent }}}
+  </div>
+  {{/each }}
+</template>
+
+<template name="navigation">
+  <div class="nav">
+    {{#each theseNavLinks }}
+    {{> navLink }}
+    {{/each }}
+  </div>
+</template>
+
+<template name="navLink">
+  <a href="{{ url }}">{{ ancorText }}</a>
+</template>
