@@ -30,7 +30,7 @@ render them.
 
 ## Template.contentList
 Renders a list of content.
-  Template.contentList({'contents': Content.find({'type': 'yourContentType'});
+    Template.contentList({'contents': Content.find({'type': 'yourContentType'});
 
 ### TODO
 publish the Content collection (leave that to the user?)
