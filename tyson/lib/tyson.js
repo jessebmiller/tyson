@@ -25,6 +25,8 @@ TYSON = (function () {
                 return handlePathFragment(pathFragment,
                                           TYSON.composeFromPath(rest))
             }
-        }
+        },
+
+        pathHandlers: {}
     }
 }());
