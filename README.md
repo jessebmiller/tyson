@@ -3,12 +3,12 @@ Tyson
 
 Universal Content.
 
-### I'm with Niel
+# I'm with Niel
 
 Tyson uses function composition and content type declaration to create dynamic
 content websites.
 
-### Tyson provides
+# Tyson provides
 
 ## {{{ renderThisPage }}}
 Renders the page based on a composition of functions declared by the url path.
@@ -26,5 +26,5 @@ here for functions to compose based on the url path.
 A collection of content with type fields identifying which template to use to
 render them.
 
-# TODO
+### TODO
 publish the Content collection (leave that to the user?)
