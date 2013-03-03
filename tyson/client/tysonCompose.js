@@ -1,7 +1,5 @@
 TYSON.pathHandlers = (function () {
-
-    return {
-        /* Put composable path functions here */
-        }
+    /* attach composable functions to this object */
+    return {}
     }
 }());

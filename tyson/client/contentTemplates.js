@@ -1,1 +1,0 @@
-/* put content template helper functions here */
