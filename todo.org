@@ -1,6 +1,0 @@
-* high priority [/]
-  - [ ] factor anything jessebmiller.com specific out.
-* medium priority [/]
-* low priority [/]
-* general
-  - [ ] consider structure
