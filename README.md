@@ -1,4 +1,7 @@
-tyson
+Tyson
 =====
 
-A functional paradigm CMS written in Meteor (currently my personal website to be generalized later)
+Universal Content.
+
+### I'm with Niel
+Tyson uses function composition and content type declaration to create dynamic content websites.
