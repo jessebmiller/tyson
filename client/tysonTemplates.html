@@ -1,5 +1,14 @@
+<template name="thisPage">
+  {{{ renderThisPage }}}
+</template>
+
 <template name="contentList">
   {{#each contents }}
   {{{ renderContent }}}
   {{/each }}
+</template>
+
+<template name="noHomepageFound">
+  <h2>Tyson could not find a homepage template</h2>
+  <p>define a template named "homepage"</p>
 </template>
