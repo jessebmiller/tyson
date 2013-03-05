@@ -4,7 +4,7 @@ var Urls = Backbone.Router.extend({
     },
     setPath: function (path) {
         path = path.split('/');
-        path.unshift('tysonDefault');
+        path.unshift('basePathHandler');
         Session.set('path', path);
     }
 });
