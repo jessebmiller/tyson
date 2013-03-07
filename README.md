@@ -6,8 +6,8 @@ Universal Content.
 I'm with Niel
 -------------
 
-Tyson uses function composition and content type declaration to create dynamic
-content websites.
+Tyson uses function composition and content type declaration to create universal
+content websites. Like Niel would.
 
 ## {{{ renderThisPage }}}
 Renders the page based on a composition of functions declared by the url path.
