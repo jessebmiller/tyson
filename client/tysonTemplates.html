@@ -1,11 +1,43 @@
+
+
 <template name="thisPage">
   {{{ renderThisPage }}}
 </template>
 
-<template name="contentList">
-  {{#each contents }}
-  {{{ renderContent }}}
-  {{/each }}
+<template name="tysonList">
+  <ul class="content list">
+    {{#each contents }}
+    <li class="content item">
+      {{{ renderThisContent }}}
+    </li>
+    {{/each }}
+  </ul>
+</template>
+
+<template name="tysonDetail">
+  <div class="content detail">
+    {{{ renderContent }}}
+  </div>
+</template>
+
+<template name="tysonPaginated">
+  <div class="paginated">
+    {{# with pageContents }}
+    {{> tysonList }}
+    {{/ with }}
+    {{# with pageNavigation }}
+    {{{ renderThisContent }}}
+    {{/ with }}
+  </div>
+</template>
+
+<template name="pageNavigation">
+  <div class="pageNavigation">
+    {{# if first }}<a href="{{ first }}">first</a>{{/ if }}
+    {{# if previous }}<a href="{{ previous }}">previous</a>{{/ if }}
+    {{# if next}}<a href="{{ next }}">next</a>{{/ if }}
+    {{# if last}}<a href="{{ last }}">last</a>{{/ if }}
+  </div>
 </template>
 
 <template name="noHomepageFound">

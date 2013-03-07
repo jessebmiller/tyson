@@ -1,11 +1,65 @@
 * ideas
 ** clarify the parts of tyson and how they interact
+
 *** path composition
 **** modularize path function composition
-     Right now the tag renderThisPage composes functions based on the url. Thoes 
-     functions are found on the pathHandlers object. I would like to be able to 
-     reuse the composition function for new renderThisX style tags 
-     (renderThisMenu for example) in order to be able to modularize the different
-     page elements.
+     Right now the tag renderThisPage composes functions based on the url.
+     Thoes functions are found on the pathHandlers object. I would like to be
+     able to reuse the composition function for new renderThisX style tags
+     (renderThisMenu for example) in order to be able to modularize the
+     different page elements.
+
+
 *** content type rendering
-_______________________________________________________________________________
+    rendering content types is now done through templates. There should be a
+    list template and a singleton template that works on any piece of content
+
+**** requirements for a content type
+***** each content type is referenced in a few places.
+      1. database: referenced by a 'type' field in the document
+         this type field essesntially names the template that renders it.
+      2. template: referenced by the template name
+         the tag {{{ renderThisContent }}} looks for a template with a name
+         matching the type of any content it is rendering.
+
+      each template should be able to handle every piece of content of it's
+      type in the system.
+
+
+
+**** content type composer templates
+
+***** DONE tysonDetail
+      TysonDetail :: Content -> Html
+      template that renders a single piece of content.
+***** DONE tysonList
+      TysonList :: {'contents': [Content]} -> Html
+      template the renders a list of content.
+
+***** TODO tysonPaginated
+      template that renders a page of content with next and previous navigation
+      I need to think about where this should live and what functions should
+      have responsibility for the page nav
+
+      is the nav an on the fly type? sounds good until I get into the weeds.
+
+**** Default Pages
+
+***** Homepage
+      Tyson expects there to be a template named 'homepage'
+      This is rendered when there are no functions called out in the path to 
+      compose.
+
+      If there is no template named 'homepage' Tyson displays the
+      noHomepageFound template informing the user that they should create a
+      homepage template.
+
+***** Not Found 404
+      Tyson expects there to be a template named 'notFound404'
+      This is called when composed functions do not return valid html.
+
+      If there is no template named 'notFound404' Tyson displays the
+      noNotFoundFound template informing the user that they should create a
+      homepage template.
+
+

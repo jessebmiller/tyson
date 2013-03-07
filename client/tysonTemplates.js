@@ -6,6 +6,3 @@ Handlebars.registerHelper('renderThisContent', function () {
     return Template[this.type](this);
 });
 
-Template.contentList.renderContent = function () {
-    return Template[this.type](this);
-}
