@@ -9,9 +9,6 @@ I'm with Niel
 Tyson uses function composition and content type declaration to create dynamic
 content websites.
 
-Tyson provides
---------------
-
 ## {{{ renderThisPage }}}
 Renders the page based on a composition of functions declared by the url path.
 Looks for these functions in TYSON.pathHandlers
