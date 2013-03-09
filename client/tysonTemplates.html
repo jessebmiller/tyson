@@ -1,5 +1,3 @@
-
-
 <template name="thisPage">
   {{{ renderThisPage }}}
 </template>
@@ -25,14 +23,14 @@
     {{# with pageContents }}
     {{> tysonList }}
     {{/ with }}
-    {{# with pageNavigation }}
+    {{# with pNav }}
     {{{ renderThisContent }}}
     {{/ with }}
   </div>
 </template>
 
-<template name="pageNavigation">
-  <div class="pageNavigation">
+<template name="pNav">
+  <div class="pNav">
     {{# if first }}<a href="{{ first }}">first</a>{{/ if }}
     {{# if previous }}<a href="{{ previous }}">previous</a>{{/ if }}
     {{# if next}}<a href="{{ next }}">next</a>{{/ if }}
@@ -48,4 +46,8 @@
 <template name="noNotFoundFound">
   <h2>Tyson could not find a not found 404 tempalte</h2>
   <p>define a template named "notFound404"</p>
+</template>
+
+<template name="article">
+  <p>{{{ markdown }}}</p>
 </template>
