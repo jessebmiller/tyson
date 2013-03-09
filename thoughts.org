@@ -1,7 +1,9 @@
 * ideas
+
 ** clarify the parts of tyson and how they interact
 
 *** path composition
+
 **** modularize path function composition
      Right now the tag renderThisPage composes functions based on the url.
      Thoes functions are found on the pathHandlers object. I would like to be
@@ -15,6 +17,7 @@
     list template and a singleton template that works on any piece of content
 
 **** requirements for a content type
+
 ***** each content type is referenced in a few places.
       1. database: referenced by a 'type' field in the document
          this type field essesntially names the template that renders it.
@@ -32,11 +35,12 @@
 ***** DONE tysonDetail
       TysonDetail :: Content -> Html
       template that renders a single piece of content.
+
 ***** DONE tysonList
       TysonList :: {'contents': [Content]} -> Html
       template the renders a list of content.
 
-***** TODO tysonPaginated
+***** DONE tysonPaginated
       template that renders a page of content with next and previous navigation
       I need to think about where this should live and what functions should
       have responsibility for the page nav
@@ -63,3 +67,12 @@
       homepage template.
 
 
+
+
+** Write Tests
+
+*** TODO paginator
+
+*** TODO path composer
+
+*** TODO type templates
