@@ -75,4 +75,5 @@
 
 *** TODO path composer
 
-*** TODO type templates
+*** TODO type templates [0/1]
+    - [ ] article
