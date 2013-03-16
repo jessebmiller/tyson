@@ -9,23 +9,23 @@ I'm with Niel
 Tyson uses function composition and content type declaration to create universal
 content websites. Like Niel would.
 
-## {{{ renderThisPage }}}
+### {{{ renderThisPage }}}
 Renders the page based on a composition of functions declared by the url path.
 Looks for these functions in TYSON.pathHandlers
 
-## {{{ renderThisContent }}}
+### {{{ renderThisContent }}}
 Renders a piece of content. Content should have a type field specifying the
 the name of a template that renders it.
 
-## TYSON.pathHandlers
+### TYSON.pathHandlers
 Attach composable functions to this object. {{{ renderThisPage }}} will look
 here for functions to compose based on the url path.
 
-## Content collection
+### Content collection
 A collection of content with type fields identifying which template to use to
 render them.
 
-## Template.contentList
+### Template.contentList
 Renders a list of content.
 
     Template.contentList({'contents': Content.find({'type': 'yourContentType'});
