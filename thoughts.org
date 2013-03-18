@@ -6,7 +6,7 @@
 
 **** modularize path function composition
      Right now the tag renderThisPage composes functions based on the url.
-     Thoes functions are found on the pathHandlers object. I would like to be
+     Those functions are found on the pathHandlers object. I would like to be
      able to reuse the composition function for new renderThisX style tags
      (renderThisMenu for example) in order to be able to modularize the
      different page elements.
