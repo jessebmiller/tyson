@@ -1,9 +1,6 @@
 * ideas
-
 ** clarify the parts of tyson and how they interact
-
 *** path composition
-
 **** modularize path function composition
      Right now the tag renderThisPage composes functions based on the url.
      Those functions are found on the pathHandlers object. I would like to be
@@ -11,12 +8,29 @@
      (renderThisMenu for example) in order to be able to modularize the
      different page elements.
 
-
-*** content type rendering
+*** content
     rendering content types is now done through templates. There should be a
     list template and a singleton template that works on any piece of content
 
+    Is this really how I want to do this? rethinking it as an illustrative
+    interface, detail, list and paginate might not want to be prepackaged.
+    
+    keep them around until I have a replacement best practice. 
+
+**** The way I really want to do it
+     Elements and content are composed into a layout based on each element,
+     conent, and layout definition. I guess this means I need some flexable way
+     to make sure that the business logic is only mashing things together that
+     fit together (type checking?)
+
 **** requirements for a content type
+
+     Content inherits from it's content type (which is a javascipt object).
+     The types inherit from TYSON.Content
+
+     content is something that lives in the database and that content producers
+     add to the system. content is not something a designer builds (though tyson
+     should have an abstraction for that too (Elements and Layouts?)).
 
 ***** each content type is referenced in a few places.
       1. database: referenced by a 'type' field in the document
@@ -28,10 +42,7 @@
       each template should be able to handle every piece of content of it's
       type in the system.
 
-
-
 **** content type composer templates
-
 ***** DONE tysonDetail
       TysonDetail :: Content -> Html
       template that renders a single piece of content.
@@ -47,8 +58,8 @@
 
       is the nav an on the fly type? sounds good until I get into the weeds.
 
-**** Default Pages
 
+**** Default Pages
 ***** Homepage
       Tyson expects there to be a template named 'homepage'
       This is rendered when there are no functions called out in the path to 
@@ -68,6 +79,16 @@
 
 
 
+
+
+
+*** Elements
+    Thoes things that designers build.
+    Buttons, Headers, Navigations and so on.
+
+*** Layouts
+    The way designers organize elements visually on a screen.
+    The grid and probably other things.
 
 ** Write Tests
 
