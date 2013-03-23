@@ -104,3 +104,7 @@
 
 *** TODO type templates [0/1]
     - [ ] article
+
+** TODO remove the paginator
+** TODO convert to currying
+** TODO content type grid DSL
