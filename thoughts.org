@@ -1,6 +1,6 @@
 * ideas
 ** clarify the parts of tyson and how they interact
-*** path composition
+*** path composition is wrong currying is right
 **** modularize path function composition
      Right now the tag renderThisPage composes functions based on the url.
      Those functions are found on the pathHandlers object. I would like to be
@@ -8,14 +8,18 @@
      (renderThisMenu for example) in order to be able to modularize the
      different page elements.
 
+*** CURRYING!!!
+**** the Path is a description of curried function application
+     partially apply arguments, which may or may not be functions defined
+     as pathHandler methods left to right across the url path.
 *** content
     rendering content types is now done through templates. There should be a
     list template and a singleton template that works on any piece of content
 
     Is this really how I want to do this? rethinking it as an illustrative
     interface, detail, list and paginate might not want to be prepackaged.
-    
-    keep them around until I have a replacement best practice. 
+
+    keep them around until I have a replacement best practice.
 
 **** The way I really want to do it
      Elements and content are composed into a layout based on each element,
@@ -23,8 +27,11 @@
      to make sure that the business logic is only mashing things together that
      fit together (type checking?)
 
-**** requirements for a content type
+     This should be accomplished with a content type DSL using Haskell like
+     type classes and static checking. A DSL for layout (grids) and elements
+     might also be good
 
+**** requirements for a content type
      Content inherits from it's content type (which is a javascipt object).
      The types inherit from TYSON.Content
 
@@ -57,7 +64,6 @@
       have responsibility for the page nav
 
       is the nav an on the fly type? sounds good until I get into the weeds.
-
 
 **** Default Pages
 ***** Homepage
