@@ -1,6 +1,6 @@
 /* to run these specs with space-daisy, create an html file with this in it.
 
-   <haed>
+   <head>
      <title>Tyson Spec Runner</title>
    </head>
    <body>
