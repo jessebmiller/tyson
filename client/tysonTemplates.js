@@ -1,5 +1,5 @@
 Handlebars.registerHelper('renderThisPage', function () {
-    return TYSON.composeFromPath(Session.get('path'));
+    return TYSON.composeFromPath(TYSON.getPathname());
 });
 
 Handlebars.registerHelper('renderThisContent', function () {
