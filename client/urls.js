@@ -1,3 +1,4 @@
+/*
 var Urls = Backbone.Router.extend({
     routes: {
         '': 'setEmptyPath',
@@ -15,3 +16,4 @@ var Urls = Backbone.Router.extend({
 
 Routes = new Urls;
 Backbone.history.start({pushState: true});
+*/
