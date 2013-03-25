@@ -9,6 +9,8 @@ I'm with Niel
 Tyson uses function composition and content type declaration to create universal
 content websites. Like Niel would.
 
+THIS IS NOT READY FOR REAL APPLICATIONS! WORK IN PROGRESS!
+
 ### {{{ renderThisPage }}}
 Renders the page based on a composition of functions declared by the url path.
 Looks for these functions in TYSON.pathHandlers
