@@ -28,6 +28,7 @@ describe("Curry/Composition Path Handling Strategy", function () {
     var pathE = '';
     var pathF = '';
     var pathG = '';
+    var pathH = '';
     var thatGetPathname = TYSON.getPathname;
 
     beforeEach(function () {
@@ -38,6 +39,7 @@ describe("Curry/Composition Path Handling Strategy", function () {
         pathE = "/dubl/add/3/1";   // 2(3 + 1) = 8
         pathF = "/func";           // returns 'func'
         pathG = "/add/1/concat/1/2/3"; // 1 + 123 = 124
+        pathH = '/concat/yes-/we-/can'; // yes-we-can
         /* big TODO: change the behavior of pathD from returning NaN to a type
            error through type checking these functions and their arguements */
 
@@ -68,7 +70,7 @@ describe("Curry/Composition Path Handling Strategy", function () {
                 return "internal error";
             }
             if (arg) {
-                return arg;
+                return 'got arguement: ' + arg;
             } else {
                 return "default path handler";
             }
@@ -87,6 +89,7 @@ describe("Curry/Composition Path Handling Strategy", function () {
         expect(TYSON.composeFromPath(pathB)).toBe(6);
         expect(TYSON.composeFromPath(pathC)).toBe(20);
         expect(TYSON.composeFromPath(pathG)).toBe(124);
+        expect(TYSON.composeFromPath(pathH)).toBe("yes-we-can");
     });
 
     it("Is triggered by {{{ renderThisPage }}}", function () {
@@ -95,8 +98,8 @@ describe("Curry/Composition Path Handling Strategy", function () {
 
     it("runs TYSON.defaultPathHandler for the root path", function () {
         expect(TYSON.composeFromPath("/")).toBe("default path handler");
-        expect(TYSON.composeFromPath("/123")).toBe("123");
-        expect(TYSON.composeFromPath("/123/")).toBe("123");
+        expect(TYSON.composeFromPath("/123")).toBe("got arguement: 123");
+        expect(TYSON.composeFromPath("/123/")).toBe("got arguement: 123");
     });
 
     it("survives errors in path handling and in function calls", function () {
