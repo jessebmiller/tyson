@@ -31,6 +31,7 @@ describe("Curry/Composition Path Handling Strategy", function () {
         pathB = "/add/5/mult/1/1"; // 5 + (1 * 1) = 6
         pathC = "/add/10/10/";     // 10 + 10 = 20
         pathD = "/add/a/10";       // error (stupid NaN)
+        pathE = "/dubl/add/3/1"; // 2(3 + 1) = 8
         /* big TODO: change the behavior of pathD from returning NaN to a type
            error through type checking these functions and their arguements */
 
@@ -39,8 +40,14 @@ describe("Curry/Composition Path Handling Strategy", function () {
         TYSON.pathHandlers.mult = function (a, b) {
             return parseInt(a, 10) * parseInt(b, 10);
         }
+
         TYSON.pathHandlers.add  = function (a, b) {
             return parseInt(a, 10) + parseInt(b, 10);
+        }
+
+        TYSON.pathHandlers.dubl = function (a) {
+            console.log('dubl');
+            return parseInt(a, 10) * 2;
         }
 
         TYSON.defaultPathHandler = function (arg, e) {
@@ -86,6 +93,10 @@ describe("Curry/Composition Path Handling Strategy", function () {
         expect(TYSON.composeFromPath(pathA)).toBe(10);
         expect(TYSON.composeFromPath(pathB)).toBe(6);
         expect(TYSON.composeFromPath(pathC)).toBe(20);
+    });
+
+    it("Does not curry functions that take only one arguement", function () {
+        expect(TYSON.composeFromPath(pathE)).toBe(8);
     });
 
     it("expects path handlers to handle NaNs. FIX WITH TYPES!", function () {
