@@ -14,7 +14,7 @@ describe("Curried function application", function () {
     function add(a, b) { return a + b }
 
     it("returns a function with the first argument filled in", function () {
-        add3 = add.curry(3);
+        var add3 = add.curry(3);
         expect(add3(10)).toBe(13);
     });
 });
@@ -24,14 +24,18 @@ describe("Curry/Composition Path Handling Strategy", function () {
     var pathA = '';
     var pathB = '';
     var pathC = '';
-    var thatGetPathname = TYSON.getPathname
+    var pathD = '';
+    var pathE = '';
+    var pathF = '';
+    var thatGetPathname = TYSON.getPathname;
 
     beforeEach(function () {
         pathA = "/mult/5/add/1/1"; // 5 * (1 + 1) = 10
         pathB = "/add/5/mult/1/1"; // 5 + (1 * 1) = 6
         pathC = "/add/10/10/";     // 10 + 10 = 20
         pathD = "/add/a/10";       // error (stupid NaN)
-        pathE = "/dubl/add/3/1"; // 2(3 + 1) = 8
+        pathE = "/dubl/add/3/1";   // 2(3 + 1) = 8
+        pathF = "/func";           // returns 'func'
         /* big TODO: change the behavior of pathD from returning NaN to a type
            error through type checking these functions and their arguements */
 
@@ -39,16 +43,20 @@ describe("Curry/Composition Path Handling Strategy", function () {
 
         TYSON.pathHandlers.mult = function (a, b) {
             return parseInt(a, 10) * parseInt(b, 10);
-        }
+        };
 
         TYSON.pathHandlers.add  = function (a, b) {
             return parseInt(a, 10) + parseInt(b, 10);
-        }
+        };
 
         TYSON.pathHandlers.dubl = function (a) {
             console.log('dubl');
             return parseInt(a, 10) * 2;
-        }
+        };
+
+        TYSON.pathHandlers.func = function () {
+            return 'func';
+        };
 
         TYSON.defaultPathHandler = function (arg, e) {
             if (e) {
@@ -59,7 +67,7 @@ describe("Curry/Composition Path Handling Strategy", function () {
             } else {
                 return "default path handler";
             }
-        }
+        };
     });
 
     afterEach(function () {
@@ -95,8 +103,12 @@ describe("Curry/Composition Path Handling Strategy", function () {
         expect(TYSON.composeFromPath(pathC)).toBe(20);
     });
 
-    it("Does not curry functions that take only one arguement", function () {
+    it("Does not curry functions that take one arguement", function () {
         expect(TYSON.composeFromPath(pathE)).toBe(8);
+    });
+
+    it("calls the function if the path is just a function", function () {
+        expect(TYSON.composeFromPath(pathF)).toBe('func');
     });
 
     it("expects path handlers to handle NaNs. FIX WITH TYPES!", function () {
