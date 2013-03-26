@@ -92,6 +92,11 @@ describe("Curry/Composition Path Handling Strategy", function () {
         expect(TYSON.composeFromPath(pathH)).toBe("yes-we-can");
     });
 
+    it("can handle mixes of functions and args", function () {
+        var path = "/add/mult/2/2/add/mult/1/1/2"; // (2*2) + ((1*1) + 2) = 7
+        expect(TYSON.composeFromPath(path)).toBe(7);
+    });
+
     it("Is triggered by {{{ renderThisPage }}}", function () {
         expect(Template.thisPage()).toBe('10');
     });
