@@ -3,6 +3,7 @@ Handlebars.registerHelper('renderThisPage', function () {
 });
 
 Handlebars.registerHelper('renderThisContent', function () {
+	console.log(this);
     return Template[this.type](this);
 });
 

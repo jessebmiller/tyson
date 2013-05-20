@@ -1,17 +1,22 @@
-/* to run these specs with space-daisy, create an html file with this in it.
+/* to run all specs with space-daisy, create an html file with this in it.
 
-   <head>
-     <title>Tyson Spec Runner</title>
-   </head>
-   <body>
-     {{> specRunner }}
-   </body>
+ <head>
+   <title>Tyson Spec Runner</title>
+ </head>
+ <body>
+   {{> specRunner }}
+ </body>
 
+ <template name="testContentType">
+   <span class="testContentType">{{ text }}</span>
+ </template>
 */
 
 describe("Curried function application", function () {
 
-    function add(a, b) { return a + b }
+    function add(a, b) { 
+        return a + b; 
+    }
 
     it("returns a function with the first argument filled in", function () {
         var add3 = add.curry(3);
@@ -21,30 +26,10 @@ describe("Curried function application", function () {
 
 describe("Curry/Composition Path Handling Strategy", function () {
 
-    var pathA = '';
-    var pathB = '';
-    var pathC = '';
-    var pathD = '';
-    var pathE = '';
-    var pathF = '';
-    var pathG = '';
-    var pathH = '';
     var thatGetPathname = TYSON.getPathname;
+    var thatDefaultPathHandler = TYSON.defaultPathHandler;
 
     beforeEach(function () {
-        pathA = "/mult/5/add/1/1"; // 5 * (1 + 1) = 10
-        pathB = "/add/5/mult/1/1"; // 5 + (1 * 1) = 6
-        pathC = "/add/10/10/";     // 10 + 10 = 20
-        pathD = "/add/a/10";       // error (stupid NaN)
-        pathE = "/dubl/add/3/1";   // 2(3 + 1) = 8
-        pathF = "/func";           // returns 'func'
-        pathG = "/add/1/concat/1/2/3"; // 1 + 123 = 124
-        pathH = '/concat/yes-/we-/can'; // yes-we-can
-        /* big TODO: change the behavior of pathD from returning NaN to a type
-           error through type checking these functions and their arguements */
-
-        TYSON.getPathname = function () { return pathA };
-
         TYSON.pathHandlers.mult = function (a, b) {
             return parseInt(a, 10) * parseInt(b, 10);
         };
@@ -65,31 +50,33 @@ describe("Curry/Composition Path Handling Strategy", function () {
             return a+b+c;
         };
 
-        TYSON.defaultPathHandler = function (arg, e) {
-            if (e) {
-                return "internal error";
-            }
-            if (arg) {
-                return 'got arguement: ' + arg;
-            } else {
-                return "default path handler";
-            }
+        TYSON.pathHandlers.error = function (a, b) {
+            throw "test error";
         };
+
     });
 
     afterEach(function () {
-        TYSON.pathHandlers.mult  = {};
-        TYSON.pathHandlers.add   = {};
-        TYSON.defaultPathHandler = {};
-        TYSON.getPahtname        = thatGetPathname;
+        TYSON.pathHandlers.mult   = {};
+        TYSON.pathHandlers.add    = {};
+        TYSON.pathHandlers.dubl   = {};
+        TYSON.pathHandlers.func   = {};
+        TYSON.pathHandlers.concat = {};
+        TYSON.pathHandlers.error  = {};
+        TYSON.getPahtname         = thatGetPathname;
+        TYSON.defaultPahtHandler  = thatDefaultPathHandler;
     });
 
-    it("Currys Curryable functions then composes the results", function () {
-        expect(TYSON.composeFromPath(pathA)).toBe(10);
-        expect(TYSON.composeFromPath(pathB)).toBe(6);
-        expect(TYSON.composeFromPath(pathC)).toBe(20);
-        expect(TYSON.composeFromPath(pathG)).toBe(124);
-        expect(TYSON.composeFromPath(pathH)).toBe("yes-we-can");
+    it("Currys the path down as far as it can go", function () {
+        /* calls add and mult in expected order */
+        expect(TYSON.composeFromPath("/mult/5/add/1/1")).toBe(10);
+        expect(TYSON.composeFromPath("/add/5/mult/1/1")).toBe(6);
+        /* works with just one function */
+        expect(TYSON.composeFromPath("/add/10/10/")).toBe(20);
+        /* works with functions of more than 2 args */
+        expect(TYSON.composeFromPath("/add/1/concat/1/2/3")).toBe(124);
+        expect(TYSON.composeFromPath("/concat/oh-/my-/guarsh"))
+            .toBe("oh-my-guarsh");
     });
 
     it("can handle mixes of functions and args", function () {
@@ -97,36 +84,42 @@ describe("Curry/Composition Path Handling Strategy", function () {
         expect(TYSON.composeFromPath(path)).toBe(7);
     });
 
-    it("Is triggered by {{{ renderThisPage }}}", function () {
+    it("Is triggered by {{{ thisPage }}}", function () {
+        TYSON.getPathname = function () {
+            return "/add/add/2/3/add/3/add/1/1";
+        };
         expect(Template.thisPage()).toBe('10');
     });
 
-    it("runs TYSON.defaultPathHandler for the root path", function () {
-        expect(TYSON.composeFromPath("/")).toBe("default path handler");
-        expect(TYSON.composeFromPath("/123")).toBe("got arguement: 123");
-        expect(TYSON.composeFromPath("/123/")).toBe("got arguement: 123");
+    it("relys on defaultPahtHandler for the root path", function () {
+	expect(TYSON.composeFromPath("/")).toBe(
+	  '<h2>Tyson could not find a homepage template</h2>\n'+
+          '  <p>define a template named "homepage"</p>');
     });
 
     it("survives errors in path handling and in function calls", function () {
-        expect(TYSON.composeFromPath("///")).toBe("internal error");
-        expect(TYSON.composeFromPath(pathA)).toBe(10);
-        expect(TYSON.composeFromPath(pathB)).toBe(6);
-        expect(TYSON.composeFromPath(pathC)).toBe(20);
+	Template.error500Page = function () {
+	    return "internal error";
+	}
+	expect(TYSON.composeFromPath("/error/5/5")).toBe("internal error");
+	expect(TYSON.composeFromPath("/mult/5/5")).toBe(25);
     });
 
-    it("Does not curry functions that take one arguement", function () {
-        expect(TYSON.composeFromPath(pathE)).toBe(8);
+    it("Works with single arguement functions", function () {
+        expect(TYSON.composeFromPath("/dubl/4")).toBe(8);
     });
 
     it("calls the function if the path is just a function", function () {
-        expect(TYSON.composeFromPath(pathF)).toBe('func called');
+        expect(TYSON.composeFromPath('/func')).toBe('func called');
     });
 
     it("expects path handlers to handle NaNs. FIX WITH TYPES!", function () {
         /* this expects NaN to flow through currently. If tyson ever gets type
            checking added this should not be an issue (Maybe anyone?) */
-        expect(isNaN(TYSON.composeFromPath(pathD))).toBe(true);
-        /* big TODO: change the behavior of pathD from returning NaN to a type
-           error through type checking these functions and their arguements */
+        expect(isNaN(TYSON.composeFromPath("/add/a/1"))).toBe(true);
+        /* big TODO: change the behavior of /add/a/1 from returning NaN to a
+           type error through type checking these functions and their
+           arguements */
     });
+
 });

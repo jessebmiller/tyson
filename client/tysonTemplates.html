@@ -6,36 +6,18 @@
   <ul class="content list">
     {{#each contents }}
     <li class="content item">
-      {{{ renderThisContent }}}
+      {{> tysonDetail }}
     </li>
     {{/each }}
   </ul>
 </template>
 
 <template name="tysonDetail">
-  <div class="content detail">
-    {{{ renderContent }}}
-  </div>
+  {{{ renderThisContent }}}
 </template>
 
-<template name="tysonPaginated">
-  <div class="paginated">
-    {{# with pageContents }}
-    {{> tysonList }}
-    {{/ with }}
-    {{# with pNav }}
-    {{{ renderThisContent }}}
-    {{/ with }}
-  </div>
-</template>
-
-<template name="pNav">
-  <div class="pNav">
-    {{# if first }}<a href="{{ first }}">first</a>{{/ if }}
-    {{# if previous }}<a href="{{ previous }}">previous</a>{{/ if }}
-    {{# if next}}<a href="{{ next }}">next</a>{{/ if }}
-    {{# if last}}<a href="{{ last }}">last</a>{{/ if }}
-  </div>
+<template name="article">
+  <div class="article">{{{ markdown }}}</div>
 </template>
 
 <template name="noHomepageFound">
@@ -43,11 +25,8 @@
   <p>define a template named "homepage"</p>
 </template>
 
-<template name="noNotFoundFound">
-  <h2>Tyson could not find a not found 404 tempalte</h2>
-  <p>define a template named "notFound404"</p>
+<template name="noErrorPageFound">
+  <h2>Tyson could not find an error {{ code }} tempalte</h2>
+  <p>define a template named "error{{ code }}"</p>
 </template>
 
-<template name="article">
-  <p>{{{ markdown }}}</p>
-</template>
