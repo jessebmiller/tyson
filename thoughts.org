@@ -54,17 +54,6 @@
       TysonDetail :: Content -> Html
       template that renders a single piece of content.
 
-***** DONE tysonList
-      TysonList :: {'contents': [Content]} -> Html
-      template the renders a list of content.
-
-***** DONE tysonPaginated
-      template that renders a page of content with next and previous navigation
-      I need to think about where this should live and what functions should
-      have responsibility for the page nav
-
-      is the nav an on the fly type? sounds good until I get into the weeds.
-
 **** Default Pages
 ***** Homepage
       Tyson expects there to be a template named 'homepage'
@@ -83,11 +72,6 @@
       noNotFoundFound template informing the user that they should create a
       homepage template.
 
-
-
-
-
-
 *** Elements
     Thoes things that designers build.
     Buttons, Headers, Navigations and so on.
@@ -98,13 +82,7 @@
 
 ** Write Tests
 
-*** TODO paginator
-
-*** TODO path composer
-
 *** TODO type templates [0/1]
-    - [ ] article
+    - [x] article
 
-** TODO remove the paginator
-** TODO convert to currying
-** TODO content type grid DSL
+** TODO grid DSL
