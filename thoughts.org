@@ -1,17 +1,17 @@
 * ideas
 ** clarify the parts of tyson and how they interact
-*** path composition is wrong currying is right
-**** modularize path function composition
-     Right now the tag renderThisPage composes functions based on the url.
-     Those functions are found on the pathHandlers object. I would like to be
-     able to reuse the composition function for new renderThisX style tags
-     (renderThisMenu for example) in order to be able to modularize the
-     different page elements.
-
+     build it as a set of narrow modules with a consistant api style
 *** CURRYING!!!
-**** the Path is a description of curried function application
+**** the Path is a DSL for curried function application
      partially apply arguments, which may or may not be functions defined
      as pathHandler methods left to right across the url path.
+**** {{ the }} template helper
+     {{ the <kind> }} rather than {{ renderThisPage }} so that we can have things
+     like {{ the content }} and {{ the menu }} each with their own set of path
+     handlers so that the functions for the menu can be indepandant of the
+     functions for the content. read it as "The content for this url" and 
+     "The menu for this url". 
+
 *** content
     rendering content types is now done through templates. There should be a
     list template and a singleton template that works on any piece of content
@@ -75,14 +75,13 @@
 *** Elements
     Thoes things that designers build.
     Buttons, Headers, Navigations and so on.
+    are these content types? {{ this socialButtonList }}
+    on the fly content?
 
 *** Layouts
     The way designers organize elements visually on a screen.
     The grid and probably other things.
 
 ** Write Tests
-
-*** TODO type templates [0/1]
-    - [x] article
 
 ** TODO grid DSL
