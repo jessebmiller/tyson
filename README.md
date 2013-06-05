@@ -11,26 +11,4 @@ content websites. Like Niel would.
 
 THIS IS NOT READY FOR REAL APPLICATIONS! WORK IN PROGRESS!
 
-### {{{ renderThisPage }}}
-Renders the page based on a composition of functions declared by the url path.
-Looks for these functions in TYSON.pathHandlers
-
-### {{{ renderThisContent }}}
-Renders a piece of content. Content should have a type field specifying the
-the name of a template that renders it.
-
-### TYSON.pathHandlers
-Attach composable functions to this object. {{{ renderThisPage }}} will look
-here for functions to compose based on the url path.
-
-### Content collection
-A collection of content with type fields identifying which template to use to
-render them.
-
-### Template.contentList
-Renders a list of content.
-
-    Template.contentList({'contents': Content.find({'type': 'yourContentType'});
-
-### TODO
-publish the Content collection (leave that to the user?)
+I am doing lots of thinking about how this will all work. Take a look at thoughts.org for a fairly unorganized account of my thinking.
