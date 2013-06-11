@@ -1,7 +1,7 @@
 * ideas
 ** clarify the parts of tyson and how they interact
-     build it as a set of narrow modules with a consistant api style
-     make them *packages!!!*
+     build it as a set of narrow modules with a consistant api style.
+     Make them *packages!!!*
 *** CURRYING!!!
 **** the Path is a DSL for curried function application
      partially apply arguments, which may or may not be functions defined
