@@ -6,7 +6,7 @@ Universal Content.
 I'm with Niel
 -------------
 
-requires wu and wu.operators I have it packaged for meteor too. should be in my github.
+requires wu I have it packaged for meteor too. should be in my github.
 
 Tyson uses function composition and content type declaration to create universal
 content websites. Like Niel would.
