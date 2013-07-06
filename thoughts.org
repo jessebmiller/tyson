@@ -1,0 +1,88 @@
+* ideas
+** clarify the parts of tyson and how they interact
+     build it as a set of narrow modules with a consistant api style.
+     Make them *packages!!!*
+*** CURRYING!!!
+**** the Path is a DSL for curried function application
+     partially apply arguments, which may or may not be functions defined
+     as pathHandler methods left to right across the url path.
+**** {{ the }} template helper
+     {{ the <kind> }} rather than {{ renderThisPage }} so that we can have things
+     like {{ the content }} and {{ the menu }} each with their own set of path
+     handlers so that the functions for the menu can be indepandant of the
+     functions for the content. read it as "The content for this url" and 
+     "The menu for this url". 
+
+*** content
+    rendering content types is now done through templates. There should be a
+    list template and a singleton template that works on any piece of content
+
+    Is this really how I want to do this? rethinking it as an illustrative
+    interface, detail, list and paginate might not want to be prepackaged.
+
+    keep them around until I have a replacement best practice.
+
+**** The way I really want to do it
+     Elements and content are composed into a layout based on each element,
+     conent, and layout definition. I guess this means I need some flexable way
+     to make sure that the business logic is only mashing things together that
+     fit together (type checking?)
+
+     This should be accomplished with a content type DSL using Haskell like
+     type classes and static checking. A DSL for layout (grids) and elements
+     might also be good
+
+**** requirements for a content type
+     Content inherits from it's content type (which is a javascipt object).
+     The types inherit from TYSON.Content
+
+     content is something that lives in the database and that content producers
+     add to the system. content is not something a designer builds (though tyson
+     should have an abstraction for that too (Elements and Layouts?)).
+
+***** each content type is referenced in a few places.
+      1. database: referenced by a 'type' field in the document
+         this type field essesntially names the template that renders it.
+      2. template: referenced by the template name
+         the tag {{{ renderThisContent }}} looks for a template with a name
+         matching the type of any content it is rendering.
+
+      each template should be able to handle every piece of content of it's
+      type in the system.
+
+**** content type composer templates
+***** DONE tysonDetail
+      TysonDetail :: Content -> Html
+      template that renders a single piece of content.
+
+**** Default Pages
+***** Homepage
+      Tyson expects there to be a template named 'homepage'
+      This is rendered when there are no functions called out in the path to 
+      compose.
+
+      If there is no template named 'homepage' Tyson displays the
+      noHomepageFound template informing the user that they should create a
+      homepage template.
+
+***** Not Found 404
+      Tyson expects there to be a template named 'notFound404'
+      This is called when composed functions do not return valid html.
+
+      If there is no template named 'notFound404' Tyson displays the
+      noNotFoundFound template informing the user that they should create a
+      homepage template.
+
+*** Elements
+    Thoes things that designers build.
+    Buttons, Headers, Navigations and so on.
+    are these content types? {{ this socialButtonList }}
+    on the fly content?
+
+*** Layouts
+    The way designers organize elements visually on a screen.
+    The grid and probably other things.
+
+** Write Tests
+
+** TODO grid DSL

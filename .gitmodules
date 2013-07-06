@@ -1,0 +1,3 @@
+[submodule "lib/space-daisy"]
+	path = lib/space-daisy
+	url = git://github.com/jessebmiller/space-daisy.git
