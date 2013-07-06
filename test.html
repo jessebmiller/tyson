@@ -1,0 +1,23 @@
+<template name="text">
+  <p>{{ text }}</p>
+</template>
+
+<template name="textLink">
+  <a href="{{ url }}">{{ text }}</a>
+</template>
+
+<template name="list">
+  <ul>
+  {{# each elements }}
+    <li>{{{ this }}}</li>
+  {{/ each }}
+  </ul>
+</template>
+
+<template name="grid">
+  <div class="{{ class }}" id="{{ id }}">
+    {{# each children }}
+    {{{ this }}}
+    {{/ each }}
+  </div>
+</template>
