@@ -159,19 +159,6 @@ function tearDown () {
     tearDownCollections();
 }
 
-/* thisView template helper tests */
-assert("{{{ thisView }}} makes a controller and gets a view", function (test) {
-    setUp();
-
-    Tyson.__getPath__ = function () {
-        return "str/add/3/4/";
-    };
-
-    test.equal(Template.thisViewTest('base'), '7');
-
-    tearDown();
-});
-
 /* general properties */
 assert("unit returns a fresh object, not a reference", function (test) {
     setUp();
@@ -182,6 +169,31 @@ assert("unit returns a fresh object, not a reference", function (test) {
     obj.p = "prop one";
     obj2.p = "prop two";
     test.isFalse(obj.p === obj2.p);
+
+    tearDown();
+});
+
+assert("registerContentTypes registers all types", function (test) {
+    var types;
+    setUp();
+
+    Tyson.registerContentTypes([{ name: 'one' }, { name: 'two' }]);
+    types = Tyson._getContentTypeDefs();
+    test.equal(types.one.name, 'one');
+    test.equal(types.two.name, 'two');
+
+    tearDown();
+});
+
+/* thisView template helper tests */
+assert("{{{ thisView }}} makes a controller and gets a view", function (test) {
+    setUp();
+
+    Tyson.__getPath__ = function () {
+        return "str/add/3/4/";
+    };
+
+    test.equal(Template.thisViewTest('base'), '7');
 
     tearDown();
 });

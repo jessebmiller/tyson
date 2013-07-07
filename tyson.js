@@ -169,6 +169,9 @@ Tyson = (function () {
         __clearContentTypeDefs__: wu.curry(setRegistry, "contentTypeDefs", {}),
         __clearControllers__: wu.curry(setRegistry, "controllers", {}),
         registerContentType: wu.curry(registerNamed, "contentTypeDefs"),
+        registerContentTypes: function (l) {
+            _.each(l, Tyson.registerContentType);
+        },
         registerController: function (name, func, args) {
             registerNamed("controllers", {
                 name: name,
