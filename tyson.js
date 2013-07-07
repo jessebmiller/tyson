@@ -14,6 +14,12 @@ Tyson = (function () {
      *   summarise: a -> Viewable b
      */
 
+    function F () {}
+    var Obj = function (proto) {
+        F.prototype = proto;
+        return new F();
+    };
+
     var registry = {
         contentTypeDefs: {},
         controllers: {}
@@ -41,7 +47,7 @@ Tyson = (function () {
     }
 
     function unit (typeName) {
-        return registry.contentTypeDefs[typeName].unit;
+        return Obj(registry.contentTypeDefs[typeName].unit);
     }
 
     function cons (structural, obj) {
@@ -177,11 +183,9 @@ Tyson = (function () {
 
         /* model and functions */
         model: function (path, baseGridName) {
-            console.log(path, baseGridName, Tyson._getContentTypeDefs());
             var controller = composeController(path);
             var baseGrid;
             baseGridName = baseGridName || "trivialGrid";
-            console.log(baseGridName);
             baseGrid = unit(baseGridName);
             return Tyson.cons(baseGrid, controller());
         },

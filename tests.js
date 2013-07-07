@@ -172,6 +172,19 @@ assert("{{{ thisView }}} makes a controller and gets a view", function (test) {
     tearDown();
 });
 
+/* general properties */
+assert("unit returns a fresh object, not a reference", function (test) {
+    setUp();
+
+    var obj = Tyson.unit("trivialGrid");
+    var obj2 = Tyson.unit("trivialGrid");
+    test.isFalse(obj === obj2);
+    obj.p = "prop one";
+    obj2.p = "prop two";
+    test.isFalse(obj.p === obj2.p);
+
+    tearDown();
+});
 
 /* model and controller function tests */
 assert("registerContentType adds type classes to registry", function (test) {
