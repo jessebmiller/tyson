@@ -1,3 +1,10 @@
+/* fix an oversight in javascript */
+function F () {}
+Obj = function (proto) {
+    F.prototype = proto;
+    return new F();
+};
+
 Tyson = (function () {
 
     /*
@@ -13,12 +20,6 @@ Tyson = (function () {
      * and MAY implement other custom functors like so
      *   summarise: a -> Viewable b
      */
-
-    function F () {}
-    var Obj = function (proto) {
-        F.prototype = proto;
-        return new F();
-    };
 
     var registry = {
         contentTypeDefs: {},
@@ -47,12 +48,14 @@ Tyson = (function () {
     }
 
     function unit (typeName) {
-        return _.extend({}, registry.contentTypeDefs[typeName].unit);
+        return registry.contentTypeDefs[typeName].unit();
     }
 
     function cons (structural, obj) {
         /* add the obj to the structural using it's type's cons method */
-        return registry.contentTypeDefs[structural.type].cons(structural, obj);
+        console.log(structural);
+        return Obj(registry.contentTypeDefs[structural.type])
+                           .cons(structural, obj);
     }
 
     function makeTrivialController(returnValue) {
@@ -192,7 +195,10 @@ Tyson = (function () {
 
         /* fmap and functor aliases */
         fmap: fmap,
-        view: function (obj) { return Tyson.fmap('view', obj); },
+        view: function (obj) {
+            console.log(obj);
+            return Tyson.fmap('view', obj);
+        },
 
         /* model and functions */
         model: function (path, baseGridName) {
@@ -200,6 +206,7 @@ Tyson = (function () {
             var baseGrid;
             baseGridName = baseGridName || "trivialGrid";
             baseGrid = unit(baseGridName);
+            console.log('base grid', baseGrid);
             return Tyson.cons(baseGrid, controller());
         },
         cons: cons,
@@ -219,10 +226,11 @@ Handlebars.registerHelper("thisView", function () {
 
 Tyson.registerContentType({
     name: "trivialGrid",
-    unit: { type: "trivialGrid", children: [] },
-    cons: function (m, obj) {
-        m.children.splice(0, 0, obj);
-        return m;
+    unit: function () { return { type: "trivialGrid", children: [] }; },
+    cons: function (grid, obj) {
+        grid = Obj(grid);
+        grid.children.splice(0, 0, obj);
+        return grid;
     },
 
     view: function (obj) {

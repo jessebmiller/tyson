@@ -38,7 +38,7 @@ function setupTestTypeDefs() {
 
     Tyson.registerContentType({
         name: "list",
-        unit: {type: "list", elements: []},
+        unit: function () { return {type: "list", elements: []}; },
         cons: function (obj, lst) { lst.elements.splice(0, 0, obj); },
         view: function (obj) {
             return Template.list({elements: _.map(obj.elements, Tyson.view)});
@@ -47,7 +47,7 @@ function setupTestTypeDefs() {
 
     Tyson.registerContentType({
         name: "trivialGrid",
-        unit: { type: "trivialGrid", children: [] },
+        unit: function () { return { type: "trivialGrid", children: [] }; },
         cons: function (m, obj) {
             m.children.splice(0, 0, obj);
             return m;
@@ -72,7 +72,7 @@ function setupTestTypeDefs() {
 
         return {
             name: "grid",
-            unit: {children: []},
+            unit: function () { return { children: [] }; },
             cons: function (grid, obj) {
                 return grid.children.splice(0, 0, obj);
             },
