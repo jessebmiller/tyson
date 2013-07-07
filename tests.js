@@ -160,11 +160,23 @@ function tearDown () {
 }
 
 /* general properties */
-assert("unit returns a fresh object, not a reference", function (test) {
+assert("multipul calls to model return the same result", function (test) {
+    var model, model2;
     setUp();
 
-    var obj = Tyson.unit("trivialGrid");
-    var obj2 = Tyson.unit("trivialGrid");
+    model = JSON.stringify(Tyson.model(['add', '2', '3'], 'trivialGrid'));
+    model2 = JSON.stringify(Tyson.model(['add', '2', '3'], 'trivialGrid'));
+    test.equal(model, model2);
+
+    tearDown();
+});
+
+assert("unit returns a fresh object, not a reference", function (test) {
+    var obj, obj2;
+    setUp();
+
+    obj = Tyson.unit("trivialGrid");
+    obj2 = Tyson.unit("trivialGrid");
     test.isFalse(obj === obj2);
     obj.p = "prop one";
     obj2.p = "prop two";

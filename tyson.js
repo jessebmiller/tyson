@@ -53,7 +53,6 @@ Tyson = (function () {
 
     function cons (structural, obj) {
         /* add the obj to the structural using it's type's cons method */
-        console.log(structural);
         return Obj(registry.contentTypeDefs[structural.type])
                            .cons(structural, obj);
     }
@@ -196,7 +195,6 @@ Tyson = (function () {
         /* fmap and functor aliases */
         fmap: fmap,
         view: function (obj) {
-            console.log(obj);
             return Tyson.fmap('view', obj);
         },
 
@@ -206,7 +204,6 @@ Tyson = (function () {
             var baseGrid;
             baseGridName = baseGridName || "trivialGrid";
             baseGrid = unit(baseGridName);
-            console.log('base grid', baseGrid);
             return Tyson.cons(baseGrid, controller());
         },
         cons: cons,
