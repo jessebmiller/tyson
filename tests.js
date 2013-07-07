@@ -178,7 +178,7 @@ assert("registerControllers registers a list of controllers", function (test) {
 
     Tyson.registerControllers([
         ["conone", function () { return 'conone'; }],
-        ["contwo", function () { return 'contwo'; }]
+        ["contwo", function () { return 'contwo'; }, 0]
     ]);
     test.equal(Tyson.model(['conone']).children[0], 'conone');
     test.equal(Tyson.model(['contwo']).children[0], 'contwo');
