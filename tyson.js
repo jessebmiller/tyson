@@ -151,6 +151,11 @@ Tyson = (function () {
     }
 
     return {
+        /* testability functions */
+        __getPath__: function () {
+            return window.location.pathname;
+        },
+
         /* register and registry convienience functions */
         register: register,
         _getContentTypeDefs: wu.curry(getRegistry, "contentTypeDefs"),
@@ -183,3 +188,12 @@ Tyson = (function () {
         cons: cons
     };
 }());
+
+Handlebars.registerHelper("thisView", function () {
+    var path = wu(Tyson.__getPath__()
+                       .split('/'))
+                       .filter(function (a) { return a; })
+                       .toArray();
+    var model = Tyson.model(path);
+    return Tyson.view(model);
+});

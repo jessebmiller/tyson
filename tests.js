@@ -21,6 +21,11 @@ function setupTestTypeDefs() {
     });
 
     Tyson.registerContentType({
+        name: "string",
+        view: function (obj) { return obj.string; }
+    });
+
+    Tyson.registerContentType({
         name: "text",
         view: Template.text,
         summarize: function (obj) { return obj.text.substring(0, 1); }
@@ -133,9 +138,14 @@ function setupControllers () {
     Tyson.registerController('mult', function (a, b) {
         return String(parseInt(a, 10) * parseInt(b, 10));
     });
+
+    Tyson.registerController('str', function (s) {
+        return {type: 'string', string: String(s) };
+    });
 }
 
 function setUp () {
+    thatGetPath = Tyson.getPath;
     tearDown();
     setupTestTypeDefs();
     setupCollections();
@@ -145,8 +155,23 @@ function setUp () {
 function tearDown () {
     Tyson.__clearContentTypeDefs__();
     Tyson.__clearControllers__();
+    Tyson.getPath = thatGetPath;
     tearDownCollections();
 }
+
+/* thisView template helper tests */
+assert("{{{ thisView }}} makes a controller and gets a view", function (test) {
+    setUp();
+
+    Tyson.__getPath__ = function () {
+        return "str/add/3/4/";
+    };
+
+    test.equal(Template.thisViewTest(), '7');
+
+    tearDown();
+});
+
 
 /* model and controller function tests */
 assert("registerContentType adds type classes to registry", function (test) {
@@ -164,7 +189,7 @@ assert("registerContentType adds type classes to registry", function (test) {
 });
 
 assert("Arbatrary controllers compose as expected", function (test) {
-    var zero, one, two, three, four, five, six, seven, eight, nine, ten;
+    var zero, one, five, ten;
     function val(trivialObj) {
         return trivialObj.children[0];
     }
