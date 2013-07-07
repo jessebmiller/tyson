@@ -177,15 +177,16 @@ Tyson = (function () {
 
         /* model and functions */
         model: function (path, baseGridName) {
+            console.log(path, baseGridName, Tyson._getContentTypeDefs());
             var controller = composeController(path);
             var baseGrid;
-            var model;
             baseGridName = baseGridName || "trivialGrid";
+            console.log(baseGridName);
             baseGrid = unit(baseGridName);
-            model = Tyson.cons(baseGrid, controller());
-            return model;
+            return Tyson.cons(baseGrid, controller());
         },
-        cons: cons
+        cons: cons,
+        unit: unit
     };
 }());
 
@@ -194,6 +195,24 @@ Handlebars.registerHelper("thisView", function () {
                        .split('/'))
                        .filter(function (a) { return a; })
                        .toArray();
-    var model = Tyson.model(path);
+    var model;
+    model = Tyson.model(path, "trivialGrid");
     return Tyson.view(model);
 });
+
+Tyson.registerContentType({
+    name: "trivialGrid",
+    unit: { type: "trivialGrid", children: [] },
+    cons: function (m, obj) {
+        m.children.splice(0, 0, obj);
+        return m;
+    },
+
+    view: function (obj) {
+        return wu(obj.children)
+            .map(Tyson.view)
+            .toArray()
+            .join('');
+    }
+});
+

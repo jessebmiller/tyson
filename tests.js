@@ -45,19 +45,19 @@ function setupTestTypeDefs() {
         }
     });
 
-
     Tyson.registerContentType({
         name: "trivialGrid",
-        unit: {type: "trivialGrid", children: [] },
+        unit: { type: "trivialGrid", children: [] },
         cons: function (m, obj) {
             m.children.splice(0, 0, obj);
             return m;
         },
+
         view: function (obj) {
             return wu(obj.children)
-                   .map(Tyson.view)
-                   .toArray()
-                   .join('');
+                .map(Tyson.view)
+                .toArray()
+                .join('');
         }
     });
 
@@ -167,7 +167,7 @@ assert("{{{ thisView }}} makes a controller and gets a view", function (test) {
         return "str/add/3/4/";
     };
 
-    test.equal(Template.thisViewTest(), '7');
+    test.equal(Template.thisViewTest('base'), '7');
 
     tearDown();
 });
@@ -196,14 +196,14 @@ assert("Arbatrary controllers compose as expected", function (test) {
 
     setUp();
 
-    zero = Tyson.model(['mult', '0', 'add', '10', '10']);
+    zero = Tyson.model(['mult', '0', 'add', '10', '10'], 'trivialGrid');
     test.equal(val(zero), '0');
-    one = Tyson.model(['add', '0', '1']);
+    one = Tyson.model(['add', '0', '1'], "trivialGrid");
     test.equal(val(one), '1');
-    ten = Tyson.model(['add', 'add', '1', '2', 'add', '3', '4']);
+    ten = Tyson.model(['add', 'add', '1', '2', 'add', '3', '4'], "trivialGrid");
     test.equal(val(ten), '10');
     five = Tyson.model(['mult', '1', 'add', '1', 'add', 'add', 'add', 'add',
-                        '0', '0', '0', '0', '4']);
+                        '0', '0', '0', '0', '4'], "trivialGrid");
     test.equal(val(five), '5');
 
     tearDown();
@@ -229,7 +229,7 @@ assert("model with single controller and many arguements", function (test) {
 
     setUp();
 
-    content = Tyson.model(["either", "text", "trivialContent"]);
+    content = Tyson.model(["either", "text", "trivialContent"], "trivialGrid");
     types = wu(content.children[0].elements).map(getType).toArray();
     test.equal(content.children.length, 1);
     test.equal(content.children[0].elements.length, 2);
@@ -257,7 +257,7 @@ assert("model with single controller no arguements works", function (test) {
     var content;
     setUp();
 
-    content = Tyson.model(["all"]);
+    content = Tyson.model(["all"], "trivialGrid");
     test.equal(content.children[0].elements[0].type, "text");
     test.equal(content.children[0].elements[0].text, "test text");
     test.equal(content.children[0].elements[1].type, "textLink");
