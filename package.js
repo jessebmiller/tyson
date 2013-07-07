@@ -3,7 +3,7 @@ Package.describe({
 });
 
 Package.on_use(function (api) {
-    api.use("wu");
+    api.use("wu-xain");
     api.add_files("tyson.js", "client");
 });
 
