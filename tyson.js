@@ -47,7 +47,7 @@ Tyson = (function () {
     }
 
     function unit (typeName) {
-        return Obj(registry.contentTypeDefs[typeName].unit);
+        return _.extend({}, registry.contentTypeDefs[typeName].unit);
     }
 
     function cons (structural, obj) {
@@ -177,6 +177,16 @@ Tyson = (function () {
                 name: name,
                 func: func,
                 args: args || func.length
+            });
+        },
+        registerControllers: function (ts) {
+            var args;
+            _.each(ts, function (t) {
+                args = (wu.match(
+                    [[String, Function, Number]], [t[0], t[1], t[2]],
+                    [[String, Function]],         [t[0], t[1], undefined]
+                )(t));
+                Tyson.registerController(args[0], args[1], args[2]);
             });
         },
 

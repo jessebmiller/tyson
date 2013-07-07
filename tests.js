@@ -173,7 +173,20 @@ assert("unit returns a fresh object, not a reference", function (test) {
     tearDown();
 });
 
-assert("registerContentTypes registers all types", function (test) {
+assert("registerControllers registers a list of controllers", function (test) {
+    setUp();
+
+    Tyson.registerControllers([
+        ["conone", function () { return 'conone'; }],
+        ["contwo", function () { return 'contwo'; }]
+    ]);
+    test.equal(Tyson.model(['conone']).children[0], 'conone');
+    test.equal(Tyson.model(['contwo']).children[0], 'contwo');
+
+    tearDown();
+});
+
+assert("registerContentTypes registers a list of types", function (test) {
     var types;
     setUp();
 
