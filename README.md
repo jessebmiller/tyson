@@ -11,7 +11,7 @@ put [wu-xian](https://github.com/jessebmiller/wu-xian) (a simple meteor package 
 #### THIS IS NOT READY FOR REAL APPLICATIONS! WORK IN PROGRESS!
 
 ## Philosophy
-Content websites can be though of as being made up of there different general pices. First and formost is the content which is an arbetrary graph of content and relations. Second is a view on subsets of the graph (all the HTML templates and CSS that declares how content is displayed on the page). Third is the logic that builds the subsets.
+Content websites can be though of as being made up of three different general pices. First and formost is the content which is an arbetrary graph of content and relations. Second is a view on subsets of the graph (all the HTML templates and CSS that declares how content is displayed on the page). Third is the logic that builds the subsets.
 
 This maps fairly cleanly to the MVC pattern. 
 
