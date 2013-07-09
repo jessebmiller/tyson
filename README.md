@@ -19,7 +19,7 @@ This maps fairly cleanly to the MVC pattern.
 In Tyson, the content is typed so the Model consists of all the arbetrary content type deffinitions, the graph of typed content and to an extend the tree of typed content for an individual page view.
 
 ### View
-Tyson.view is a datatype (content type) generic function that takes a tree of typed Viewable content, and returns the HTML and CSS. As long as the Viewable type class is implemented for each content type in the tree, Tyson.view will generate the HTML. 
+Tyson.view is a datatype (content type) generic function that takes a tree of typed Viewable content, and returns the HTML. As long as the Viewable type class is implemented for each content type in the tree, Tyson.view will generate the HTML. 
 
 ### Controller
 In Tyson, the controller is composed from the URL path. We register composable functions and build urls that describe how to compose them into the controller for the page. This controller should ultimately return a tree of content to be passed to the view function.
