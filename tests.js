@@ -13,31 +13,44 @@ current user, settings and so on).
 // run tests only on the client
 var assert = Meteor.isClient ? Tinytest.add : function () {};
 
+var thatGetPath;
+
 function setupTestTypeDefs() {
     Tyson.registerContentType({
-        name: "trivialContent",
+        type: "trivialContent",
         view: function () { return "trivial content"; },
         summarize: function () { return "tc"; }
     });
 
     Tyson.registerContentType({
-        name: "string",
+        type: "string",
         view: function (obj) { return obj.string; }
     });
 
     Tyson.registerContentType({
-        name: "text",
+        type: "text",
         view: Template.text,
+        unit: function () { return { type: 'text', text: '' }; },
+        cons: function (obj, text) {
+            obj.text = text + obj.text;
+            return obj;
+        },
         summarize: function (obj) { return obj.text.substring(0, 1); }
     });
 
     Tyson.registerContentType({
-        name: "textLink",
-        view: Template.textLink
+        type: "textLink",
+        view: Template.textLink,
+        unit: function () { return { type: 'textLink', url: '', text: '' }; },
+        cons: function (obj, link) {
+            obj.url = (link.url || '') + obj.url;
+            obj.text = (link.text || '') + obj.text;
+            return obj;
+        }
     });
 
     Tyson.registerContentType({
-        name: "list",
+        type: "list",
         unit: function () { return {type: "list", elements: []}; },
         cons: function (obj, lst) { lst.elements.splice(0, 0, obj); },
         view: function (obj) {
@@ -46,7 +59,7 @@ function setupTestTypeDefs() {
     });
 
     Tyson.registerContentType({
-        name: "trivialGrid",
+        type: "trivialGrid",
         unit: function () { return { type: "trivialGrid", children: [] }; },
         cons: function (m, obj) {
             m.children.splice(0, 0, obj);
@@ -71,7 +84,7 @@ function setupTestTypeDefs() {
         }
 
         return {
-            name: "grid",
+            type: "grid",
             unit: function () { return { children: [] }; },
             cons: function (grid, obj) {
                 return grid.children.splice(0, 0, obj);
@@ -160,6 +173,10 @@ function tearDown () {
 }
 
 /* general properties */
+assert("write test for Tyson.typeDef", function (test) {
+    test.isTrue(false);
+});
+
 assert("multipul calls to model return the same result", function (test) {
     var model, model2;
     setUp();
@@ -202,10 +219,10 @@ assert("registerContentTypes registers a list of types", function (test) {
     var types;
     setUp();
 
-    Tyson.registerContentTypes([{ name: 'one' }, { name: 'two' }]);
+    Tyson.registerContentTypes([{ type: 'one' }, { type: 'two' }]);
     types = Tyson._getContentTypeDefs();
-    test.equal(types.one.name, 'one');
-    test.equal(types.two.name, 'two');
+    test.equal(types.one.type, 'one');
+    test.equal(types.two.type, 'two');
 
     tearDown();
 });

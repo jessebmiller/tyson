@@ -1,5 +1,5 @@
 /* fix an oversight in javascript */
-function F () {}
+function F() {}
 Obj = function (proto) {
     F.prototype = proto;
     return new F();
@@ -33,8 +33,8 @@ Tyson = (function () {
         registry[name][key] = value;
     }
 
-    function registerNamed (registryName, namedObj) {
-        register(registryName, namedObj.name, namedObj);
+    function registerTyped (registryName, typedObj) {
+        register(registryName, typedObj.type, typedObj);
     }
 
     function getPathList () {
@@ -54,7 +54,7 @@ Tyson = (function () {
     function cons (structural, obj) {
         /* add the obj to the structural using it's type's cons method */
         return Obj(registry.contentTypeDefs[structural.type])
-                           .cons(structural, obj);
+            .cons(structural, obj);
     }
 
     function makeTrivialController(returnValue) {
@@ -166,17 +166,20 @@ Tyson = (function () {
 
         /* register and registry convienience functions */
         register: register,
+        typeDef: function (typeName) {
+            return getRegistry("contentTypeDefs")[typeName];
+        },
         _getContentTypeDefs: wu.curry(getRegistry, "contentTypeDefs"),
         _getControllers: wu.curry(getRegistry, "controllers"),
         __clearContentTypeDefs__: wu.curry(setRegistry, "contentTypeDefs", {}),
         __clearControllers__: wu.curry(setRegistry, "controllers", {}),
-        registerContentType: wu.curry(registerNamed, "contentTypeDefs"),
+        registerContentType: wu.curry(registerTyped, "contentTypeDefs"),
         registerContentTypes: function (l) {
             _.each(l, Tyson.registerContentType);
         },
-        registerController: function (name, func, args) {
-            registerNamed("controllers", {
-                name: name,
+        registerController: function (type, func, args) {
+            registerTyped("controllers", {
+                type: type,
                 func: func,
                 args: args || func.length
             });
@@ -222,7 +225,7 @@ Handlebars.registerHelper("thisView", function () {
 });
 
 Tyson.registerContentType({
-    name: "trivialGrid",
+    type: "trivialGrid",
     unit: function () { return { type: "trivialGrid", children: [] }; },
     cons: function (grid, obj) {
         grid = Obj(grid);
