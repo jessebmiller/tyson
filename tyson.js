@@ -214,13 +214,13 @@ Tyson = (function () {
     };
 }());
 
-Handlebars.registerHelper("thisView", function () {
+Handlebars.registerHelper("thisView", function (baseGridName) {
     var path = wu(Tyson.__getPath__()
                        .split('/'))
                        .filter(function (a) { return a; })
                        .toArray();
     var model;
-    model = Tyson.model(path, "trivialGrid");
+    model = Tyson.model(path, baseGridName);
     return Tyson.view(model);
 });
 
