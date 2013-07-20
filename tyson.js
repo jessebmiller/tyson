@@ -224,6 +224,10 @@ Handlebars.registerHelper("thisView", function () {
     return Tyson.view(model);
 });
 
+Handlebars.registerHelper("viewContent", function (c) {
+    return Tyson.view(c);
+});
+
 Tyson.registerContentType({
     type: "trivialGrid",
     unit: function () { return { type: "trivialGrid", children: [] }; },
@@ -234,10 +238,7 @@ Tyson.registerContentType({
     },
 
     view: function (obj) {
-        return wu(obj.children)
-            .map(Tyson.view)
-            .toArray()
-            .join('');
+        return _.map(obj.children, Tyson.view).join('');
     }
 });
 
