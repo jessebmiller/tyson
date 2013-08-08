@@ -201,10 +201,15 @@ Tyson = (function () {
         /* model and functions */
         model: function (path, baseGridName) {
             var controller = composeController(path);
-            var baseGrid;
-            baseGridName = baseGridName || "trivialGrid";
+            var baseGrid, contentTree;
+            if (typeof baseGridName === "string") {
+                baseGridName = baseGridName;
+            } else {
+                baseGridName = "trivialGrid";
+            }
             baseGrid = unit(baseGridName);
-            return Tyson.cons(baseGrid, controller());
+            contentTree = controller();
+            return contentTree ? Tyson.cons(baseGrid, contentTree) : baseGrid;
         },
         cons: cons,
         unit: unit
