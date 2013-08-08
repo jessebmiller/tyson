@@ -11,5 +11,5 @@ Package.on_test(function (api) {
     api.use(["tyson", "tinytest", "test-helpers", "templating", "jquery",
              "autopublish", "insecure"]);
     api.add_files("tests.js", ["client", "server"]);
-    api.add_files(["test.html", "testTypes.js"], "client");
+    api.add_files(["test.html"], "client");
 });

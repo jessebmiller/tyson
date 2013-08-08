@@ -173,10 +173,6 @@ function tearDown () {
 }
 
 /* general properties */
-assert("write test for Tyson.typeDef", function (test) {
-    test.isTrue(false);
-});
-
 assert("multipul calls to model return the same result", function (test) {
     var model, model2;
     setUp();
@@ -235,7 +231,7 @@ assert("{{{ thisView }}} makes a controller and gets a view", function (test) {
         return "str/add/3/4/";
     };
 
-    test.equal(Template.thisViewTest('base'), '7');
+    test.equal(Template.thisViewTest(), '7');
 
     tearDown();
 });

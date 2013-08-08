@@ -166,9 +166,6 @@ Tyson = (function () {
 
         /* register and registry convienience functions */
         register: register,
-        typeDef: function (typeName) {
-            return getRegistry("contentTypeDefs")[typeName];
-        },
         _getContentTypeDefs: wu.curry(getRegistry, "contentTypeDefs"),
         _getControllers: wu.curry(getRegistry, "controllers"),
         __clearContentTypeDefs__: wu.curry(setRegistry, "contentTypeDefs", {}),
