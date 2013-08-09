@@ -21,6 +21,10 @@ Tyson = (function () {
      *   summarise: a -> Viewable b
      */
 
+    var homeController = function () {
+        throw "please register a home controller";
+    };
+
     var registry = {
         contentTypeDefs: {},
         controllers: {}
@@ -191,6 +195,10 @@ Tyson = (function () {
                 Tyson.registerController(args[0], args[1], args[2]);
             });
         },
+        registerHomeController: function (controller) {
+            homeController = controller;
+        },
+        getHomeController: function () { return homeController; },
 
         /* fmap and functor aliases */
         fmap: fmap,
@@ -222,6 +230,9 @@ Handlebars.registerHelper("thisView", function (baseGridName) {
                        .filter(function (a) { return a; })
                        .toArray();
     var model;
+    if (path.length == 0){
+        path.push(Tyson.getHomeController());
+    }
     model = Tyson.model(path, baseGridName);
     return Tyson.view(model);
 });
