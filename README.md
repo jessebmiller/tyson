@@ -6,7 +6,7 @@ Tyson uses function composition and content type declaration to create universal
 content websites. Like Niel would.
 
 ## Usage
-put [wu-xian](https://github.com/jessebmiller/wu-xian) (a simple meteor package of wu.js) and Tyson in the /packages folder. I like to use git submodules for this.
+put [functionalMeteor](https://github.com/jessebmiller/functionalMeteor) (a meteor package of functionalJS from loop/recur) and Tyson in the /packages folder. I like to use git submodules for this.
 
 #### THIS IS NOT READY FOR REAL APPLICATIONS! WORK IN PROGRESS!
 
