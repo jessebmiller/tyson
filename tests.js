@@ -67,10 +67,7 @@ function setupTestTypeDefs() {
         },
 
         view: function (obj) {
-            return wu(obj.children)
-                .map(Tyson.view)
-                .toArray()
-                .join('');
+            return obj.children.map(Tyson.view).join('');
         }
     });
 
@@ -200,14 +197,14 @@ assert("unit returns a fresh object, not a reference", function (test) {
 
 assert("registerControllers registers a list of controllers", function (test) {
     setUp();
-
+    console.log("THIS ONE");
     Tyson.registerControllers([
         ["conone", function () { return 'conone'; }],
         ["contwo", function () { return 'contwo'; }, 0]
     ]);
     test.equal(Tyson.model(['conone']).children[0], 'conone');
     test.equal(Tyson.model(['contwo']).children[0], 'contwo');
-
+    console.log("THAT ONE");
     tearDown();
 });
 
@@ -293,7 +290,7 @@ assert("model with single controller and many arguements", function (test) {
     setUp();
 
     content = Tyson.model(["either", "text", "trivialContent"], "trivialGrid");
-    types = wu(content.children[0].elements).map(getType).toArray();
+    types = content.children[0].elements.map(getType);
     test.equal(content.children.length, 1);
     test.equal(content.children[0].elements.length, 2);
     test.isTrue(hasText("text", types));
