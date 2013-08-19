@@ -48,7 +48,12 @@ Tyson = (function () {
 
     var fmap = function (functor, obj) {
         /* apply the obj's type's functor to the obj */
-        return registry.contentTypeDefs[obj.type][functor](obj);
+        try {
+            return registry.contentTypeDefs[obj.type][functor](obj);
+        } catch (e) {
+            console.log("could not apply ", functor, " to ", obj);
+            throw e;
+        }
     }.autoCurry();
 
     function unit (typeName) {
@@ -84,7 +89,6 @@ Tyson = (function () {
         func = (controller.args > 0)
             ? controller.func.autoCurry(controller.args)
             : controller.func.autoCurry();
-        console.log(controller, func, func());
         func.args = controller.args;
         return func;
     }
@@ -197,7 +201,6 @@ Tyson = (function () {
             _.each(ts, function (t) {
                 // ensure args[2] is indexable
                 t.push(undefined);
-                console.log('registerControllers', t);
                 Tyson.registerController(t[0], t[1], t[2]);
             });
         },
