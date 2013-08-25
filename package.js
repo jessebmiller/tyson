@@ -5,7 +5,7 @@ Package.describe({
 Package.on_use(function (api) {
     api.use(["functionalMeteor", "handlebars"]);
     api.add_files("tyson.js", "client");
-    api.export('Tyson', 'client');
+    api.export('Tyson', ['client', 'server']);
 });
 
 Package.on_test(function (api) {
