@@ -33,23 +33,28 @@ Tyson = (function () {
     function getRegistry (name) { return registry[name]; }
     function setRegistry (name, state) { registry[name] = state; }
 
-    function register (name, key, value) {
+    var register = function (name, key, value) {
         registry[name][key] = value;
-    }
+    }.autoCurry();
 
-    function registerTyped (registryName, typedObj) {
+    var registerTyped = function (registryName, typedObj) {
         register(registryName, typedObj.type, typedObj);
-    }
+    }.autoCurry();
 
     function getPathList () {
         var path = window.location.pathname;
         return _.filter(path.split('/'), function (elm) { return elm; });
     }
 
-    function fmap (functor, obj) {
+    var fmap = function (functor, obj) {
         /* apply the obj's type's functor to the obj */
-        return registry.contentTypeDefs[obj.type][functor](obj);
-    }
+        try {
+            return registry.contentTypeDefs[obj.type][functor](obj);
+        } catch (e) {
+            console.log("could not apply ", functor, " to ", obj);
+            throw e;
+        }
+    }.autoCurry();
 
     function unit (typeName) {
         return registry.contentTypeDefs[typeName].unit();
@@ -80,7 +85,10 @@ Tyson = (function () {
          */
         var controller = registry.controllers[controllerName]
                 || makeTrivialController(controllerName);
-        var func = wu.autoCurry(controller.func, controller.args);
+        var func;
+        func = (controller.args > 0)
+            ? controller.func.autoCurry(controller.args)
+            : controller.func.autoCurry();
         func.args = controller.args;
         return func;
     }
@@ -155,7 +163,7 @@ Tyson = (function () {
         }
 
         var headFunc = getFunc(_.head(path));
-        var tailFuncs = wu(_.tail(path)).map(getFunc).toArray();
+        var tailFuncs = functional.map(getFunc, _.tail(path));
         return function () {
             var structuredData = composePathFuncs(headFunc, tailFuncs)[0];
             return structuredData;
@@ -170,11 +178,11 @@ Tyson = (function () {
 
         /* register and registry convienience functions */
         register: register,
-        _getContentTypeDefs: wu.curry(getRegistry, "contentTypeDefs"),
-        _getControllers: wu.curry(getRegistry, "controllers"),
-        __clearContentTypeDefs__: wu.curry(setRegistry, "contentTypeDefs", {}),
-        __clearControllers__: wu.curry(setRegistry, "controllers", {}),
-        registerContentType: wu.curry(registerTyped, "contentTypeDefs"),
+        _getContentTypeDefs: getRegistry.partial("contentTypeDefs"),
+        _getControllers: getRegistry.partial("controllers"),
+        __clearContentTypeDefs__: setRegistry.partial("contentTypeDefs", {}),
+        __clearControllers__: setRegistry.partial("controllers", {}),
+        registerContentType: registerTyped("contentTypeDefs"),
         registerContentTypes: function (l) {
             _.each(l, Tyson.registerContentType);
         },
@@ -186,13 +194,14 @@ Tyson = (function () {
             });
         },
         registerControllers: function (ts) {
-            var args;
+            /* ts should be in the form [[String, Function, Opt Int]...]
+               This represents the controllers, name, function, and expected
+               number of args which is optional
+             */
             _.each(ts, function (t) {
-                args = (wu.match(
-                    [[String, Function, Number]], [t[0], t[1], t[2]],
-                    [[String, Function]],         [t[0], t[1], undefined]
-                )(t));
-                Tyson.registerController(args[0], args[1], args[2]);
+                // ensure args[2] is indexable
+                t.push(undefined);
+                Tyson.registerController(t[0], t[1], t[2]);
             });
         },
         registerHomeController: function (controller) {
@@ -225,10 +234,7 @@ Tyson = (function () {
 }());
 
 Handlebars.registerHelper("thisView", function (baseGridName) {
-    var path = wu(Tyson.__getPath__()
-                       .split('/'))
-                       .filter(function (a) { return a; })
-                       .toArray();
+    var path = functional.select(functional.I, Tyson.__getPath__().split('/'));
     var model;
     if (path.length == 0){
         path.push(Tyson.getHomeController());
