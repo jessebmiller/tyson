@@ -212,7 +212,12 @@ Tyson = (function () {
         /* fmap and functor aliases */
         fmap: fmap,
         view: function (obj) {
-            return Tyson.fmap('view', obj);
+            var view = Session.get('view') || 'view';
+            try {
+                return Tyson.fmap(view, obj);
+            } catch (e) {
+                return Tyson.fmap('view', obj);
+            }
         },
 
         /* model and functions */
