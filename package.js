@@ -3,8 +3,9 @@ Package.describe({
 });
 
 Package.on_use(function (api) {
-    api.use(["functionalMeteor", "handlebars"]);
-    api.add_files("tyson.js", "client");
+    api.use(["functionalMeteor", "handlebars", "caffeine", "minimongo"]);
+    api.add_files("tyson.js", ["client", "server"]);
+    api.add_files("tysonClient.js", "client");
     api.export('Tyson', ['client', 'server']);
 });
 

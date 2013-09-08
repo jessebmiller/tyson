@@ -37,40 +37,44 @@ Tyson = (function () {
         registry[name][key] = value;
     }.autoCurry();
 
-    var registerTyped = function (registryName, typedObj) {
-        register(registryName, typedObj.type, typedObj);
-    }.autoCurry();
-
     function getPathList () {
         var path = window.location.pathname;
         return _.filter(path.split('/'), function (elm) { return elm; });
     }
 
-    var fmap = function (functor, obj) {
-        /* apply the obj's type's functor to the obj */
-        try {
-            return registry.contentTypeDefs[obj.type][functor](obj);
-        } catch (e) {
-            console.log("could not apply ", functor, " to ", obj);
-            throw e;
+    var Viewable = makeClass(['views']);
+    var EJSONable = makeClass(['clone', 'equals', 'typeName', 'toJSONValue']);
+
+    var BaseGrid = Constructor(function (contentTree) {
+        /* the base grid at the root of all content trees
+         * implement views on this type to change the behavior of the
+         * base grid
+         */
+        this.content = contentTree;
+    });
+
+    Viewable(BaseGrid, {
+        views: function () {
+            return {
+                view: function (a) { return Tyson.view(a.content); }
+            };
         }
-    }.autoCurry();
+    });
 
-    function unit (typeName) {
-        return registry.contentTypeDefs[typeName].unit();
-    }
-
-    function cons (structural, obj) {
-        /* add the obj to the structural using it's type's cons method */
-        return Obj(registry.contentTypeDefs[structural.type])
-            .cons(structural, obj);
+    function makeStore(collection) {
+        return function (obj) {
+            return collection.insert({
+                __type: obj.typeName(),
+                __value: obj.toJSONValue()
+            });
+        };
     }
 
     function makeTrivialController(returnValue) {
         /* return a controller who's function returns the given returnValue
-           and takes no arguements
-
-           used as a default controller for path "arguements"
+         * and takes no arguements
+         *
+         * used as a default controller for path "arguements"
          */
         var trivialController = {
             func: function () { return returnValue; },
@@ -95,12 +99,12 @@ Tyson = (function () {
 
     function composeController (path) {
          /* curry functions that need arguements and compose the resulting
-            functions
+          * functions
           */
 
         function curryPathFunc (head, tail) {
             /* curry into the head function enough of the tail to make it a 1
-               arguement function (being sure to recursivly compose the tail)
+             * arguement function (being sure to recursivly compose the tail)
              */
             var composedTail = composePathFuncs(_.head(tail), _.tail(tail));
             var curriedHead;
@@ -176,22 +180,14 @@ Tyson = (function () {
             return window.location.pathname;
         },
 
-        /* register and registry convienience functions */
         register: register,
-        _getContentTypeDefs: getRegistry.partial("contentTypeDefs"),
         _getControllers: getRegistry.partial("controllers"),
-        __clearContentTypeDefs__: setRegistry.partial("contentTypeDefs", {}),
         __clearControllers__: setRegistry.partial("controllers", {}),
-        registerContentType: registerTyped("contentTypeDefs"),
-        registerContentTypes: function (l) {
-            _.each(l, Tyson.registerContentType);
-        },
-        registerController: function (type, func, args) {
-            registerTyped("controllers", {
-                type: type,
-                func: func,
-                args: args || func.length
-            });
+        registerController: function (name, func, numArgs) {
+            var controller = {};
+            controller.args = numArgs || func.length;
+            controller.func = func;
+            registry.controllers[name] = controller;
         },
         registerControllers: function (ts) {
             /* ts should be in the form [[String, Function, Opt Int]...]
@@ -209,60 +205,63 @@ Tyson = (function () {
         },
         getHomeController: function () { return homeController; },
 
-        /* fmap and functor aliases */
-        fmap: fmap,
+        Viewable: Viewable,
         view: function (obj) {
-            var view = Session.get('view') || 'view';
-            try {
-                return Tyson.fmap(view, obj);
-            } catch (e) {
-                return Tyson.fmap('view', obj);
+            if (!(obj.views instanceof Function)) {
+                console.log(obj);
+                throw new Error ("please implement the View typeClass");
+            }
+            try { /* try the view named in the session first */
+                return obj.views()[Session.get('view')](obj);
+            } catch (e) { /* if that fails try the standard view */
+                return obj.views()['view'](obj);
             }
         },
 
-        /* model and functions */
-        model: function (path, baseGridName) {
+        model: function (path, baseGridType) {
             var controller = composeController(path);
-            var baseGrid, contentTree;
-            if (typeof baseGridName === "string") {
-                baseGridName = baseGridName;
-            } else {
-                baseGridName = "trivialGrid";
-            }
-            baseGrid = unit(baseGridName);
-            contentTree = controller();
-            return contentTree ? Tyson.cons(baseGrid, contentTree) : baseGrid;
+            var baseGridType = baseGridType || Array;
+            var baseGrid = unit(baseGridType);
+            var contentTree = controller();
+            return contentTree || baseGrid;
         },
-        cons: cons,
-        unit: unit
+        EJSONable: EJSONable,
+        makeStore: makeStore
     };
 }());
 
-Handlebars.registerHelper("thisView", function (baseGridName) {
-    var path = functional.select(functional.I, Tyson.__getPath__().split('/'));
-    var model;
-    if (path.length == 0){
-        path.push(Tyson.getHomeController());
-    }
-    model = Tyson.model(path, baseGridName);
-    return Tyson.view(model);
-});
-
-Handlebars.registerHelper("viewContent", function (c) {
-    return Tyson.view(c);
-});
-
-Tyson.registerContentType({
-    type: "trivialGrid",
-    unit: function () { return { type: "trivialGrid", children: [] }; },
-    cons: function (grid, obj) {
-        grid = Obj(grid);
-        grid.children.splice(0, 0, obj);
-        return grid;
-    },
-
-    view: function (obj) {
-        return _.map(obj.children, Tyson.view).join('');
+Tyson.Viewable(Array, {
+    views: function () {
+        return {
+            view: function (as) {
+                return functional.map(Tyson.view, as).join('');
+            }
+        };
     }
 });
 
+function reconstitute(doc) {
+    /* Mongo Document -> Typed Content */
+    if (doc.__type) {
+        doc = EJSON.fromJSONValue({
+            $type: doc.__type,
+            $value: doc.__value
+        });
+    }
+    return doc;
+}
+
+/* instance Viewable for LocalCollection.Cursor
+ * if it's a custom type built by storeContent, return it to the custom type
+ * before handing it to the view function, otherwise hand it to the view
+ * function as is.
+ */
+Tyson.Viewable(Package.minimongo.LocalCollection.Cursor, {
+    views: function () {
+        return {
+            view: function (cursor) {
+                return Tyson.view(cursor.map(reconstitute));
+            }
+        };
+    }
+});
