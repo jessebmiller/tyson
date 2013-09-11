@@ -1,4 +1,4 @@
-Handlebars.registerHelper("thisView", function (baseGridType) {
+Handlebars.registerHelper("thisView", function () {
     var path = functional.select(functional.I, Tyson.__getPath__().split('/'));
     var model;
     if (path.length == 0){

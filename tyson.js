@@ -42,8 +42,9 @@ Tyson = (function () {
         return _.filter(path.split('/'), function (elm) { return elm; });
     }
 
-    var Viewable = makeClass(['views']);
-    var EJSONable = makeClass(['clone', 'equals', 'typeName', 'toJSONValue']);
+    var Viewable = makeClass("TysonViewable", ['views']);
+    var EJSONable = makeClass("TysonEJSONable",
+                              ['clone', 'equals', 'typeName', 'toJSONValue']);
 
     var BaseGrid = Constructor(function (contentTree) {
         /* the base grid at the root of all content trees
@@ -207,22 +208,18 @@ Tyson = (function () {
 
         Viewable: Viewable,
         view: function (obj) {
-            if (!(obj.views instanceof Function)) {
-                console.log(obj);
-                throw new Error ("please implement the View typeClass");
-            }
+            var views = vtable("TysonViewable", obj).views();
             try { /* try the view named in the session first */
-                return obj.views()[Session.get('view')](obj);
+                return views[Session.get('view')](obj);
             } catch (e) { /* if that fails try the standard view */
-                return obj.views()['view'](obj);
+                return views['view'](obj);
             }
         },
 
-        model: function (path, baseGridType) {
+        model: function (path, baseGrid) {
             var controller = composeController(path);
-            var baseGridType = baseGridType || Array;
-            var baseGrid = unit(baseGridType);
             var contentTree = controller();
+            baseGrid = baseGrid || [];
             return contentTree || baseGrid;
         },
         EJSONable: EJSONable,
