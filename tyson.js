@@ -208,6 +208,9 @@ Tyson = (function () {
 
         Viewable: Viewable,
         view: function (obj) {
+            if (obj === undefined) {
+                return '';
+            }
             var views = vtable("TysonViewable", obj).views();
             try { /* try the view named in the session first */
                 return views[Session.get('view')](obj);
@@ -230,8 +233,8 @@ Tyson = (function () {
 Tyson.Viewable(Array, {
     views: function () {
         return {
-            view: function (as) {
-                return functional.map(Tyson.view, as).join('');
+            view: function (xs) {
+                return functional.map(Tyson.view, xs).join('');
             }
         };
     }
